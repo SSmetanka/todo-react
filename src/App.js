@@ -11,6 +11,7 @@ function App() {
       const newToDo = {
         id: uuidv4(),
         task: useInput,
+        isFlag: false,
         isComplete: false,
       }
       setTodos([...todos, newToDo])
@@ -29,23 +30,43 @@ function App() {
     ])
   }
 
+  const changeFlag = (id) => {
+    setTodos([
+      ...todos.map((todo) =>
+        todo.id === id ? { ...todo, isFlag: !todo.isFlag } : {...todo }
+      )
+    ])
+  }
+
   return (
     <div className="App">
+      <img
+        src="images/todo.png"
+        alt="todo"
+        className="todoImg"
+      />
       <header>
-        <h1>Задачи - {todos.length}</h1>
+        <h1>TODO</h1>
       </header>
       <ToDoForm addTask={addTask}/>
-      {todos.map((todo) => {
-        return(
-          <ToDo
-            todo={todo}
-            key={todo.id}
-            deleteTask={deleteTask}
-            changeStatus={changeStatus}
-          />
-        )
-      })}
-
+      { !todos.length ?
+        <div className="zeroTodo">
+          Add your first todo
+        </div>
+        :
+        todos.map((todo) => {
+          return(
+            <ToDo
+              todo={todo}
+              key={todo.id}
+              deleteTask={deleteTask}
+              changeStatus={changeStatus}
+              changeFlag={changeFlag}
+            />
+          )
+        })
+      }
+      { todos.length ? <span>{todos.length} items</span> : "" }
     </div>
   );
 }

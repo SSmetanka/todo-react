@@ -19,7 +19,7 @@ function ToDoForm({ addTask }) {
         value={input}
         onChange={handleChange}
         type="text"
-        placeholder="Введите задачу..."
+        placeholder="New task..."
         className="form__input"
       />
       <button className="form__add">
