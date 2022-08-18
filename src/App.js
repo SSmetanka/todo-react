@@ -1,10 +1,10 @@
 import ToDo from "./components/ToDo";
 import ToDoForm from "./components/ToDoForm";
-import {useState} from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")) || [])
 
   const addTask = (useInput) => {
     if (useInput.trim()){
@@ -14,28 +14,31 @@ function App() {
         isFlag: false,
         isComplete: false,
       }
-      setTodos([...todos, newToDo])
+      localStorage.setItem("todos", JSON.stringify([...todos, newToDo]))
+      setTodos(JSON.parse(localStorage.getItem("todos")))
     }
   }
 
   const deleteTask = (id) => {
-    setTodos([...todos.filter((todo) => todo.id !== id)])
+    let data = JSON.parse(localStorage.getItem("todos")).filter((todo) => todo.id !== id)
+    localStorage.setItem("todos", JSON.stringify(data))
+    setTodos(JSON.parse(localStorage.getItem("todos")))
   }
 
   const changeStatus = (id) => {
-    setTodos([
-      ...todos.map((todo) =>
-        todo.id === id ? { ...todo, isComplete: !todo.isComplete } : {...todo }
-      )
-    ])
+    let data = JSON.parse(localStorage.getItem("todos")).map((todo) =>
+      todo.id === id ? { ...todo, isComplete: !todo.isComplete } : { ...todo }
+    )
+    localStorage.setItem("todos", JSON.stringify(data))
+    setTodos(JSON.parse(localStorage.getItem("todos")))
   }
 
   const changeFlag = (id) => {
-    setTodos([
-      ...todos.map((todo) =>
-        todo.id === id ? { ...todo, isFlag: !todo.isFlag } : {...todo }
-      )
-    ])
+    let data = JSON.parse(localStorage.getItem("todos")).map((todo) =>
+      todo.id === id ? { ...todo, isFlag: !todo.isFlag } : { ...todo }
+    )
+    localStorage.setItem("todos", JSON.stringify(data))
+    setTodos(JSON.parse(localStorage.getItem("todos")))
   }
 
   return (
