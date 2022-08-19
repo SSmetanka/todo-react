@@ -1,10 +1,19 @@
 import ToDo from "./components/ToDo";
 import ToDoForm from "./components/ToDoForm";
+import Select from "react-select";
 import { useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")) || [])
+  const [filter, setFilter] = useState({ value: "All", label: "All" })
+
+  const optionsSort = [
+    { value: "All", label: "All" },
+    { value: "Active", label: "Active" },
+    { value: "Completed", label: "Completed" },
+    { value: "Important", label: "Important" },
+  ]
 
   const addTask = (useInput) => {
     if (useInput.trim()){
@@ -23,6 +32,7 @@ function App() {
     let data = JSON.parse(localStorage.getItem("todos")).filter((todo) => todo.id !== id)
     localStorage.setItem("todos", JSON.stringify(data))
     setTodos(JSON.parse(localStorage.getItem("todos")))
+    sortToDo(filter)
   }
 
   const changeStatus = (id) => {
@@ -31,6 +41,7 @@ function App() {
     )
     localStorage.setItem("todos", JSON.stringify(data))
     setTodos(JSON.parse(localStorage.getItem("todos")))
+    sortToDo(filter)
   }
 
   const changeFlag = (id) => {
@@ -39,6 +50,25 @@ function App() {
     )
     localStorage.setItem("todos", JSON.stringify(data))
     setTodos(JSON.parse(localStorage.getItem("todos")))
+    sortToDo(filter)
+  }
+
+  const sortToDo = (val) => {
+    setFilter(val)
+    let data = JSON.parse(localStorage.getItem("todos"))
+    switch (val.value) {
+      case "Active":
+        setTodos(data.filter((todo) => !todo.isComplete))
+        break
+      case "Completed":
+        setTodos(data.filter((todo) => todo.isComplete))
+        break
+      case "Important":
+        setTodos(data.filter((todo) => todo.isFlag))
+        break
+      default:
+        setTodos(data)
+    }
   }
 
   return (
@@ -51,7 +81,15 @@ function App() {
       <header>
         <h1>TODO</h1>
       </header>
-      <ToDoForm addTask={addTask}/>
+      <div className="flex">
+        <ToDoForm addTask={addTask}/>
+        <Select
+          className="todoSort"
+          onChange={sortToDo}
+          options={optionsSort}
+          placeholder="All"
+        />
+      </div>
       { !todos.length ?
         <div className="zeroTodo">
           Add your first todo

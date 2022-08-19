@@ -17,6 +17,7 @@ function ToDoForm({ addTask }) {
     <form onSubmit={handleSubmit} className="form">
       <input
         value={input}
+        name="ToDoForm"
         onChange={handleChange}
         type="text"
         placeholder="New task..."
