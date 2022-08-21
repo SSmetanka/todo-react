@@ -3,10 +3,14 @@ import ToDoForm from "./components/ToDoForm";
 import Select from "react-select";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Modal from "./components/Modal";
+import ChangeToDo from "./components/ChangeToDo";
 
 function App() {
   const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")) || [])
   const [filter, setFilter] = useState({ value: "All", label: "All" })
+  const [modal, setModal] = useState(false)
+  const [dataChangeToDo, setDataChangeToDo] = useState({})
 
   const optionsSort = [
     { value: "All", label: "All" },
@@ -28,7 +32,7 @@ function App() {
     }
   }
 
-  const deleteTask = (id) => {
+  const deleteToDo = (id) => {
     let data = JSON.parse(localStorage.getItem("todos")).filter((todo) => todo.id !== id)
     localStorage.setItem("todos", JSON.stringify(data))
     setTodos(JSON.parse(localStorage.getItem("todos")))
@@ -51,6 +55,22 @@ function App() {
     localStorage.setItem("todos", JSON.stringify(data))
     setTodos(JSON.parse(localStorage.getItem("todos")))
     sortToDo(filter)
+
+  }
+
+  const changeToDo = (todo) => {
+    closeModal()
+    setDataChangeToDo(todo)
+  }
+
+  const saveChangeToDo = (id, task) => {
+    closeModal()
+    let data = JSON.parse(localStorage.getItem("todos")).map((todo) =>
+      todo.id === id ? { ...todo, task: task } : { ...todo }
+    )
+    localStorage.setItem("todos", JSON.stringify(data))
+    setTodos(JSON.parse(localStorage.getItem("todos")))
+    sortToDo(filter)
   }
 
   const sortToDo = (val) => {
@@ -69,6 +89,10 @@ function App() {
       default:
         setTodos(data)
     }
+  }
+
+  const closeModal = () => {
+    setModal(!modal)
   }
 
   return (
@@ -100,14 +124,23 @@ function App() {
             <ToDo
               todo={todo}
               key={todo.id}
-              deleteTask={deleteTask}
+              deleteToDo={deleteToDo}
               changeStatus={changeStatus}
               changeFlag={changeFlag}
+              changeToDo={changeToDo}
             />
           )
         })
       }
       { todos.length ? <span>{todos.length} items</span> : "" }
+      {modal &&
+        <Modal closeModal={closeModal}>
+          <ChangeToDo
+            data={dataChangeToDo}
+            saveChangeToDo={saveChangeToDo}
+          />
+        </Modal>
+      }
     </div>
   );
 }
