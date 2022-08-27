@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { IconPlus } from "./Icons";
 
 function ToDoForm({ addTask }) {
   const [input, setInput] = useState('')
@@ -24,10 +25,7 @@ function ToDoForm({ addTask }) {
         className="form__input"
       />
       <button className="form__add">
-        <img
-          src="icons/plus-solid.svg"
-          alt="plus"
-        />
+        <IconPlus/>
       </button>
     </form>
   )

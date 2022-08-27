@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 function ChangeToDo({ data, saveChangeToDo }) {
   const [input, setInput] = useState(data.task)
