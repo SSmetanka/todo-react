@@ -50,7 +50,7 @@ export function useTodo() {
     localStorage.setItem("todos", JSON.stringify(data))
     setTodos(JSON.parse(localStorage.getItem("todos")))
     sortToDo(filter)
-
+    console.log(data)
   }
 
   const changeToDo = (todo) => {
