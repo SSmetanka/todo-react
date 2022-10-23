@@ -15,7 +15,7 @@ Used to create user interface.\
 ### `create-react-app`
 
 Used to create a project.\
-[https://create-react-app.dev](https://create-react-app.dev) uuid - website.
+[https://create-react-app.dev](https://create-react-app.dev) create-react-app - website.
 
 ### `localStorage`
 
